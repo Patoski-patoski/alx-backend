@@ -3,7 +3,8 @@
 
 
 def index_range(page: int, page_size: int):
-    """_summary_
+    """ a function named index_range that takes two integer arguments page and
+    page_size.
 
     Args:
         page (int): page number
