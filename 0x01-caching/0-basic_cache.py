@@ -5,17 +5,25 @@ BaseCaching = __import__('base_caching').BaseCaching
 
 
 class BasicCache(BaseCaching):
-    """class BasicCache that inherits from BaseCaching and is a caching system
+    """BasicCache: that inherits from BaseCaching and is a caching system:
+
+    Args:
+        BaseCaching (_type_): inherited class
     """
 
     def put(self, key, item):
-        """Add an item in the cache
+        """_summary_: assign to the dictionary self.cache_data the item value
+          for the key
+
+        Args:
+            key (_type_): _description_
+            item (_type_): _description_
+
+        Returns:
+            _type_: _description_: nothing
         """
-        if key is not None and item is not None:
+        if key is not None or item is not None:
             self.cache_data[key] = item
 
     def get(self, key):
-        """Get an item by key
-        """
-        if key is not None:
-            return self.cache_data.get(key, None)
+        return self.cache_data.get(key, None)
