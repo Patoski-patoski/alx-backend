@@ -2,13 +2,8 @@
 """0-app.py"""
 
 from flask import Flask, render_template
-from flask_babel import Babel
 
 app = Flask(__name__)
-app.config['BABEL_DEFAULT_LOCALE'] = 'en'
-app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
-babel = Babel(app)
-
 
 @app.route('/')
 def index():
@@ -17,4 +12,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
