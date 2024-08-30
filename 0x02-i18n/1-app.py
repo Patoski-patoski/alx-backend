@@ -4,7 +4,7 @@ from flask import Flask, render_template
 from flask_babel import Babel
 
 app = Flask(__name__)
-app.config['BABEL_DEFAULT_LOCALE'] = ['en', 'fr']
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
 
 babel = Babel(app)
