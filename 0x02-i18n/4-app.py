@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Basic Flask_Babel setup with internationalization support
-Parametrize templates"""
+Parametrize templates
+"""
 
 from flask import Flask, render_template, request
 from flask_babel import Babel
@@ -24,7 +25,6 @@ def get_locale():
     locale = request.args.get('locale')
     if locale and locale in app.config['LANGUAGES']:
         return locale
-
     return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
