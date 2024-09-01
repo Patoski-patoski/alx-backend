@@ -2,25 +2,19 @@
 """Basic Flask_Babel setup with internationalization support
    Parametrize templates
    Force locale with URL parameter
-   Use user locale
 """
 
-from typing import Dict, Union
-from flask import Flask, render_template, request, g
+from flask import Flask, g, render_template, request
 from flask_babel import Babel
+from typing import Union, Dict
 
 
 class Config:
-    """Config class
-    """
+    """Config settings"""
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = "en"
     BABEL_DEFAULT_TIMEZONE = "UTC"
 
-
-app = Flask(__name__)
-app.config.from_object(Config)
-babel = Babel(app)
 
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
@@ -29,44 +23,62 @@ users = {
     4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
+app = Flask(__name__)
+app.config.from_object(Config)
+babel = Babel(app)
+
 
 def get_user() -> Union[Dict, None]:
-    """Return a user dictionary or None
-    """
-    user_id = request.args.get("login_as")
-    if user_id is not None:
-        return users.get(int(user_id))
+    """get user_name"""
+    login_as = request.args.get('login_as', None)
+    if login_as:
+        login_as = int(login_as)
+        return users.get(login_as)
+
     return None
 
 
 @app.before_request
-def before_request() -> None:
-    """Set a user as a global on flask.g.user
-    """
+def before_request():
+    """get global user"""
     g.user = get_user()
 
 
 @babel.localeselector
-def get_locale() -> str:
-    """ return the best match """
-    lang = request.args.get("locale")
-    if lang in app.config["LANGUAGES"]:
+def get_locale():
+    """Determine the best locale based on the following order:
+    1. Locale from URL parameters
+    2. Locale from user settings (if logged in)
+    3. Locale from request headers
+    4. Default locale
+    """
+    # Locale from URL parameters
+    lang = request.args.get('lang', None)
+    if lang and lang in app.config['LANGUAGES']:
         return lang
+
+    # Locale from user settings (if logged in)
     if g.user:
-        lang = g.user.get("locale")
-        if lang and lang in app.config["LANGUAGES"]:
-            return lang
-    lang = request.headers.get('locale')
-    if lang in app.config['LANGUAGES']:
-        return lang
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
+        user_locale = g.user.get('locale')
+        if user_locale in app.config['LANGUAGES']:
+            return user_locale
+
+    # Locale from request headers
+    locale = request.accept_languages.best_match(app.config['LANGUAGES'])
+
+    if locale:
+        return locale
+    # Default locale
+    return app.config['BABEL_DEFAULT_LOCALE']
+
+
+app.jinja_env.globals['get_locale'] = get_locale
 
 
 @app.route("/")
-def index() -> str:
-    """render_template: 6-index.html
-    """
-    return render_template("6-index.html")
+def index():
+    """render_template: 5-index.html"""
+    return render_template("5-index.html", get_locale=get_locale)
 
 
 if __name__ == '__main__':
