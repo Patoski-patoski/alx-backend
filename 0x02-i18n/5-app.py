@@ -53,6 +53,7 @@ def get_locale() -> str:
         return locale
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
+
 app.jinja_env.globals['get_locale'] = get_locale
 
 
