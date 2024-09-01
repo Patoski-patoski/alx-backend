@@ -4,8 +4,9 @@
    Force locale with URL parameter
 """
 
-from flask import Flask, render_template, request
-from flask_babel import Babel, g
+from flask import Flask, g, render_template, request
+from flask_babel import Babel
+from typing import Union, Dict
 
 
 class Config:
