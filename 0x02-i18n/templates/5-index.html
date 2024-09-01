@@ -10,7 +10,7 @@
     {% if g.user %}
         <p>{{ _("You are logged in as %(username)s.", username=g.user.get('name')) }}</p>
     {% else %}
-        <p>{{ _("You are not logged in") }}</p>
+        <p>{{ _("You are not logged in.") }}</p>
     {% endif %}
 </body>
 </html>
