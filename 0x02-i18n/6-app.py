@@ -53,9 +53,9 @@ def get_locale():
     4. Default locale
     """
     # Locale from URL parameters
-    lang = request.args.get('lang', None)
-    if lang and lang in app.config['LANGUAGES']:
-        return lang
+    locale = request.args.get('locale', None)
+    if locale and locale in app.config['LANGUAGES']:
+        return locale
 
     # Locale from user settings (if logged in)
     if g.user:
